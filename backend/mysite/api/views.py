@@ -23,3 +23,14 @@ class UserMoviesUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         queryset = UserMovies.objects.all()
         serializer_class = UserMovieSerializer
         lookup_field = "pk"
+
+class UserMoviesList(generics.ListAPIView):
+    serializer_class = UserMovieSerializer
+
+    def get_queryset(self):
+        # Obtener el parámetro user_id de la URL
+        user_id = self.kwargs['user_id']
+
+        # Filtrar los animes asociados al user_id proporcionado
+        queryset = UserMovies.objects.filter(user_id=user_id)
+        return queryset

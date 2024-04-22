@@ -16,9 +16,9 @@ Including another URLconf
 """
 from django.urls import path
 
-from api.views import AddMovieToUser, MovieRetrieveUpdateDestroy, SaveMovieView, UserMoviesUpdateDestroy
+from api.views import AddMovieToUser, MovieRetrieveUpdateDestroy, SaveMovieView, UserMoviesList, UserMoviesUpdateDestroy, UserMovies
 from animes.views import AddAnimeToUser, AnimeRetrieveUpdateDestroy, SaveAnimeView, UserAnimeUpdateDestroy, UserAnimes
-from series.views import AddSerieToUser, SaveSerieView, SerieRetrieveUpdateDestroy, UserSerieUpdateDestroy
+from series.views import AddSerieToUser, SaveSerieView, SerieRetrieveUpdateDestroy, UserSerieUpdateDestroy, UserSeries
 
 urlpatterns = [
     #movies
@@ -26,15 +26,17 @@ urlpatterns = [
     path('movie/<uuid:pk>/', MovieRetrieveUpdateDestroy.as_view(), name='update-movie'),
     path('user/movie/', AddMovieToUser.as_view(), name='user-movie'),
     path('user/movie/<uuid:pk>/', UserMoviesUpdateDestroy.as_view(), name='user-movies'),
+    path('movies/user/<str:user_id>', UserMoviesList.as_view(), name='user-movies-list'),
     #series
     path('save_serie/', SaveSerieView.as_view(), name='save-serie'),
     path('serie/<uuid:pk>/', SerieRetrieveUpdateDestroy.as_view(), name='update-serie'),
     path('user/serie/', AddSerieToUser.as_view(), name='user-serie'),
     path('user/serie/<uuid:pk>', UserSerieUpdateDestroy.as_view(), name='user-series'),
+    path('series/user/<str:user_id>', UserSeries.as_view(), name='user-series-list'),
     #Anime
     path('save_anime/', SaveAnimeView.as_view(), name='save-anime'),
     path('anime/<uuid:pk>/', AnimeRetrieveUpdateDestroy.as_view(), name='update-anime'),
     path('user/anime/', AddAnimeToUser.as_view(), name='user-anime'),
     path('user/anime/<uuid:pk>', UserAnimeUpdateDestroy.as_view(), name='user-anime'),
-    path('anime/user/<str:user_id>', UserAnimes.as_view(), name='user-animes')
+    path('animes/user/<str:user_id>', UserAnimes.as_view(), name='user-animes-list')
 ]
