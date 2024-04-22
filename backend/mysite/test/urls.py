@@ -17,10 +17,17 @@ Including another URLconf
 from django.urls import path
 
 from api.views import AddMovieToUser, MovieRetrieveUpdateDestroy, SaveMovieView, UserMoviesUpdateDestroy
+from series.views import AddSerieToUser, SaveSerieView, SerieRetrieveUpdateDestroy, UserSerieUpdateDestroy
 
 urlpatterns = [
+    #movies
     path('save_movie/', SaveMovieView.as_view(), name='save-movie'),
     path('movie/<uuid:pk>/', MovieRetrieveUpdateDestroy.as_view(), name='update-movie'),
-    path('user/', AddMovieToUser.as_view(), name='user-movie'),
-    path('user/<uuid:pk>', UserMoviesUpdateDestroy.as_view(), name='user-movies'),
+    path('user/movie/', AddMovieToUser.as_view(), name='user-movie'),
+    path('user/<uuid:pk>/', UserMoviesUpdateDestroy.as_view(), name='user-movies'),
+    #series
+    path('save_serie/', SaveSerieView.as_view(), name='save-serie'),
+    path('serie/<uuid:pk>/', SerieRetrieveUpdateDestroy.as_view(), name='update-serie'),
+    path('user/serie/', AddSerieToUser.as_view(), name='user-serie'),
+    path('user/<uuid:pk>', UserSerieUpdateDestroy.as_view(), name='user-series'),
 ]
