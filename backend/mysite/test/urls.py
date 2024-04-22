@@ -17,6 +17,7 @@ Including another URLconf
 from django.urls import path
 
 from api.views import AddMovieToUser, MovieRetrieveUpdateDestroy, SaveMovieView, UserMoviesUpdateDestroy
+from animes.views import AddAnimeToUser, AnimeRetrieveUpdateDestroy, SaveAnimeView, UserAnimeUpdateDestroy, UserAnimes
 from series.views import AddSerieToUser, SaveSerieView, SerieRetrieveUpdateDestroy, UserSerieUpdateDestroy
 
 urlpatterns = [
@@ -24,10 +25,16 @@ urlpatterns = [
     path('save_movie/', SaveMovieView.as_view(), name='save-movie'),
     path('movie/<uuid:pk>/', MovieRetrieveUpdateDestroy.as_view(), name='update-movie'),
     path('user/movie/', AddMovieToUser.as_view(), name='user-movie'),
-    path('user/<uuid:pk>/', UserMoviesUpdateDestroy.as_view(), name='user-movies'),
+    path('user/movie/<uuid:pk>/', UserMoviesUpdateDestroy.as_view(), name='user-movies'),
     #series
     path('save_serie/', SaveSerieView.as_view(), name='save-serie'),
     path('serie/<uuid:pk>/', SerieRetrieveUpdateDestroy.as_view(), name='update-serie'),
     path('user/serie/', AddSerieToUser.as_view(), name='user-serie'),
-    path('user/<uuid:pk>', UserSerieUpdateDestroy.as_view(), name='user-series'),
+    path('user/serie/<uuid:pk>', UserSerieUpdateDestroy.as_view(), name='user-series'),
+    #Anime
+    path('save_anime/', SaveAnimeView.as_view(), name='save-anime'),
+    path('anime/<uuid:pk>/', AnimeRetrieveUpdateDestroy.as_view(), name='update-anime'),
+    path('user/anime/', AddAnimeToUser.as_view(), name='user-anime'),
+    path('user/anime/<uuid:pk>', UserAnimeUpdateDestroy.as_view(), name='user-anime'),
+    path('anime/user/<str:user_id>', UserAnimes.as_view(), name='user-animes')
 ]
