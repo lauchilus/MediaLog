@@ -40,7 +40,9 @@ INSTALLED_APPS = [
     'api',
     'rest_framework',
     "series",
-    "animes"
+    "animes",
+    "games",
+    "books"
 ]
 
 MIDDLEWARE = [

@@ -18,6 +18,8 @@ from django.urls import path
 
 from api.views import AddMovieToUser, MovieRetrieveUpdateDestroy, SaveMovieView, UserMoviesList, UserMoviesUpdateDestroy, UserMovies
 from animes.views import AddAnimeToUser, AnimeRetrieveUpdateDestroy, SaveAnimeView, UserAnimeUpdateDestroy, UserAnimes
+from books.views import AddBookToUser, BookRetrieveUpdateDestroy, SaveBookView, UserBookUpdateDestroy, UserBooks
+from games.views import AddGameToUser, GameRetrieveUpdateDestroy, SaveGameView, UserGameUpdateDestroy, UserGames
 from series.views import AddSerieToUser, SaveSerieView, SerieRetrieveUpdateDestroy, UserSerieUpdateDestroy, UserSeries
 
 urlpatterns = [
@@ -38,5 +40,17 @@ urlpatterns = [
     path('anime/<uuid:pk>/', AnimeRetrieveUpdateDestroy.as_view(), name='update-anime'),
     path('user/anime/', AddAnimeToUser.as_view(), name='user-anime'),
     path('user/anime/<uuid:pk>', UserAnimeUpdateDestroy.as_view(), name='user-anime'),
-    path('animes/user/<str:user_id>', UserAnimes.as_view(), name='user-animes-list')
+    path('animes/user/<str:user_id>', UserAnimes.as_view(), name='user-animes-list'),
+    #Games
+    path('save_game/', SaveGameView.as_view(), name='save-game'),
+    path('game/<uuid:pk>/', GameRetrieveUpdateDestroy.as_view(), name='update-game'),
+    path('user/game/', AddGameToUser.as_view(), name='user-game'),
+    path('user/game/<uuid:pk>', UserGameUpdateDestroy.as_view(), name='user-game'),
+    path('games/user/<str:user_id>', UserGames.as_view(), name='user-games-list'),
+    #Books
+    path('save_book/', SaveBookView.as_view(), name='save-book'),
+    path('book/<uuid:pk>/', BookRetrieveUpdateDestroy.as_view(), name='update-book'),
+    path('user/book/', AddBookToUser.as_view(), name='user-book'),
+    path('user/book/<uuid:pk>', UserBookUpdateDestroy.as_view(), name='user-book'),
+    path('games/book/<str:user_id>', UserBooks.as_view(), name='user-books-list')
 ]
