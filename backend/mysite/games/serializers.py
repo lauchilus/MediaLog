@@ -11,4 +11,4 @@ class GameSerializer(serializers.ModelSerializer):
 class UserGameSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserGame
-        fields = ["id", "user_id","game"]
+        fields = ["id", "user_id","game","date"]

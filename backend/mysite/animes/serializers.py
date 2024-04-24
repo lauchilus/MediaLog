@@ -10,4 +10,4 @@ class AnimeSerializer(serializers.ModelSerializer):
 class UserAnimeSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserAnime
-        fields = ["id", "user_id","anime"]
+        fields = ["id", "user_id","anime","date"]

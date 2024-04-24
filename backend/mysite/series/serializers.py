@@ -14,4 +14,4 @@ class SerieSerializer(serializers.ModelSerializer):
 class UserSerieSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserSerie
-        fields = ["id","user_id","serie"]
+        fields = ["id","user_id","serie","date"]
