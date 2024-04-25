@@ -9,7 +9,7 @@ class Movie(models.Model):
     tmdb_id = models.CharField(max_length=100)
     name = models.CharField(max_length=255,blank=True, default='No name provided')
     overview = models.TextField(blank=True, default='No description provided')
-    release_date = models.DateField()
+    release_date = models.DateField(default=datetime.date.today)
     poster_url = models.URLField()
 
     def __str__(self):

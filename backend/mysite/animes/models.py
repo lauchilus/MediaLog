@@ -7,10 +7,10 @@ from django.db import models
 class Anime(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     mal_id = models.CharField(max_length=100)
-    name = models.CharField(max_length=255)
-    synopsis = models.TextField()
-    release_date = models.DateField()
-    end_date = models.DateField()
+    name = models.CharField(max_length=255,blank=True, default='No name provided')
+    synopsis = models.TextField(blank=True, default='No description provided')
+    release_date = models.DateField(default=datetime.date.today)
+    end_date = models.DateField(default=datetime.date.today)
     poster_url = models.URLField()
 
     def __str__(self):

@@ -8,8 +8,8 @@ class Book(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     open_library_id = models.CharField(max_length=100)
     title = models.CharField(max_length=255)
-    author = models.TextField()
-    publish_date = models.DateField()
+    author = models.TextField(blank=True, default='No author provided')
+    publish_date = models.DateField(default=datetime.date.today)
     cover_url = models.URLField()
 
     def __str__(self):
