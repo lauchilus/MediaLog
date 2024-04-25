@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     "series",
     "animes",
     "games",
-    "books"
+    "books",
+    "external_api"
 ]
 
 MIDDLEWARE = [

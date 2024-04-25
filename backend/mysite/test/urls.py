@@ -18,6 +18,7 @@ from django.urls import path
 
 from api.views import AddMovieToUser, MovieRetrieveUpdateDestroy, SaveMovieView, UserMoviesList, UserMoviesUpdateDestroy, UserMovies
 from animes.views import AddAnimeToUser, AnimeRetrieveUpdateDestroy, SaveAnimeView, UserAnimeUpdateDestroy, UserAnimes
+from external_api.views import TMDBApiCallMovieDetails, TMDBApiCallMoviesList, TMDBApiCallSerieDetails, TMDBApiCallSeriesList
 from books.views import AddBookToUser, BookRetrieveUpdateDestroy, SaveBookView, UserBookUpdateDestroy, UserBooks
 from games.views import AddGameToUser, GameRetrieveUpdateDestroy, SaveGameView, UserGameUpdateDestroy, UserGames
 from series.views import AddSerieToUser, SaveSerieView, SerieRetrieveUpdateDestroy, UserSerieUpdateDestroy, UserSeries
@@ -52,5 +53,10 @@ urlpatterns = [
     path('book/<uuid:pk>/', BookRetrieveUpdateDestroy.as_view(), name='update-book'),
     path('user/book/', AddBookToUser.as_view(), name='user-book'),
     path('user/book/<uuid:pk>', UserBookUpdateDestroy.as_view(), name='user-book'),
-    path('games/book/<str:user_id>', UserBooks.as_view(), name='user-books-list')
+    path('games/book/<str:user_id>', UserBooks.as_view(), name='user-books-list'),
+    #ApiCalls
+    path('movie/search/',TMDBApiCallMoviesList, name = 'search-list-movies'),
+    path('movie/detail/',TMDBApiCallMovieDetails, name = 'search-movie-detail'),
+    path('serie/search/',TMDBApiCallSeriesList, name = 'search-list-series'),
+    path('serie/detail/',TMDBApiCallSerieDetails, name = 'search-serie-detail'),
 ]
