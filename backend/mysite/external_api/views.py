@@ -1,3 +1,4 @@
+import math
 import os
 from django.http import JsonResponse
 from django.shortcuts import render
@@ -268,5 +269,71 @@ def IGDBApiCallGamesDetails(request):
             return JsonResponse(filtered_objects,safe = False)
         else:
             return JsonResponse({'error': 'Failed to fetch data from external API'}, status=api_response.status_code)
+    except requests.exceptions.RequestException as e:
+         return JsonResponse({'error': str(e)}, status=500)
+    
+def SearchBooksList(request):
+    search = request.GET.get('q','')
+    offset = request.GET.get('page',1)
+    url = f'https://openlibrary.org/search.json?q={search}&fields=key,title,author_name,author_key,publish_date,cover_i&limit=15&offset={15 *(offset-1)}'
+
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            data = response.json()
+            page = math.ceil(data.get('numFound')/15) 
+            meta_info = {
+                'page' : 15 *(offset-1),
+                'total_pages': page,
+                'total_results': data.get('numFound')
+            }
+            if 'docs' in data:
+                objects_list = data['docs']
+                filtered_objects = []
+                for obj in objects_list:
+                    filtered_obj = {
+                        'id': obj.get('key'), 
+                        'title': obj.get('title'),
+                        'author_name': obj.get('author_name')[0],
+                        'author_key': obj.get('author_key')[0],
+                        'poster_url': f'https://covers.openlibrary.org/b/id/{obj.get('cover_i')}-M.jpg'
+                    }
+                    filtered_objects.append(filtered_obj)
+                response_data = {
+                    'pagination': meta_info,
+                    'books': filtered_objects
+                }
+                return JsonResponse(response_data)
+            else:
+                return JsonResponse({'error': 'No objects found in API response'}, status=400)
+        else:
+            return JsonResponse({'error': 'Failed to retrieve data from TMDB API'}, status=500)
+    except requests.exceptions.RequestException as e:
+         return JsonResponse({'error': str(e)}, status=500)
+    
+
+def BookDetails(request):
+    search = request.GET.get('q','')
+    url = f'https://openlibrary.org/works/{search}.json'
+
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            data = response.json()
+            
+            
+            obj = data
+            print(data)
+                
+            book = {
+                        'id': obj.get('key'), 
+                        'title': obj.get('title'),
+                        'author_key': obj.get('authors')[0].get('author').get('key'),
+                        'description': obj.get('description'),
+                        'poster_url': f'https://covers.openlibrary.org/b/id/{obj.get('covers')[0]}-M.jpg'
+                    }
+            return JsonResponse(book)
+        else:
+            return JsonResponse({'error': 'Failed to retrieve data from TMDB API'}, status=500)
     except requests.exceptions.RequestException as e:
          return JsonResponse({'error': str(e)}, status=500)
