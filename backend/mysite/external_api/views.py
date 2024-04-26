@@ -323,7 +323,6 @@ def BookDetails(request):
             
             
             obj = data
-            print(data)
                 
             book = {
                         'id': obj.get('key'), 
