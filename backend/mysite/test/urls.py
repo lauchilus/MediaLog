@@ -18,7 +18,7 @@ from django.urls import path
 
 from api.views import AddMovieToUser, MovieRetrieveUpdateDestroy, SaveMovieView, UserMoviesList, UserMoviesUpdateDestroy, UserMovies
 from animes.views import AddAnimeToUser, AnimeRetrieveUpdateDestroy, SaveAnimeView, UserAnimeUpdateDestroy, UserAnimes
-from external_api.views import TMDBApiCallMovieDetails, TMDBApiCallMoviesList, TMDBApiCallSerieDetails, TMDBApiCallSeriesList
+from external_api.views import IGDBApiCallGamesList, TMDBApiCallMovieDetails, TMDBApiCallMoviesList, TMDBApiCallSerieDetails, TMDBApiCallSeriesList
 from books.views import AddBookToUser, BookRetrieveUpdateDestroy, SaveBookView, UserBookUpdateDestroy, UserBooks
 from games.views import AddGameToUser, GameRetrieveUpdateDestroy, SaveGameView, UserGameUpdateDestroy, UserGames
 from series.views import AddSerieToUser, SaveSerieView, SerieRetrieveUpdateDestroy, UserSerieUpdateDestroy, UserSeries
@@ -59,4 +59,5 @@ urlpatterns = [
     path('movie/detail/',TMDBApiCallMovieDetails, name = 'search-movie-detail'),
     path('serie/search/',TMDBApiCallSeriesList, name = 'search-list-series'),
     path('serie/detail/',TMDBApiCallSerieDetails, name = 'search-serie-detail'),
+    path('game/search/',IGDBApiCallGamesList, name = 'search-list-games'),
 ]

@@ -4,15 +4,21 @@ from django.shortcuts import render
 import requests
 from dotenv import load_dotenv
 
+from external_api.utils import get_access_token
+
 
 
 # Create your views here.
 load_dotenv()
 
-headers = {
+headers_TMDB = {
     "accept": "application/json",
     "Authorization": 'Bearer ' + os.getenv("TMDB_ACCESS_TOKEN")
 }
+
+
+
+
 
 
 def TMDBApiCallMoviesList(request):
@@ -21,7 +27,7 @@ def TMDBApiCallMoviesList(request):
     api_url = f"https://api.themoviedb.org/3/search/movie?query={search_term}&include_adult=false&language=en-US&page={page}"
     try:
         # Realiza la solicitud GET a la API externa
-        response = requests.get(api_url,headers=headers)
+        response = requests.get(api_url,headers=headers_TMDB)
 
         # Verifica si la solicitud fue exitosa (código de respuesta 200)
         if response.status_code == 200:
@@ -76,7 +82,7 @@ def TMDBApiCallMovieDetails(request):
     api_url = f"https://api.themoviedb.org/3/movie/{movie_id}?language=en-US"
     try:
         # Realiza la solicitud GET a la API externa
-        response = requests.get(api_url,headers=headers)
+        response = requests.get(api_url,headers=headers_TMDB)
 
         # Verifica si la solicitud fue exitosa (código de respuesta 200)
         if response.status_code == 200:
@@ -111,7 +117,7 @@ def TMDBApiCallSeriesList(request):
     api_url = f"https://api.themoviedb.org/3/search/tv?query={search_term}&include_adult=false&language=en-US&page={page}"
     try:
         # Realiza la solicitud GET a la API externa
-        response = requests.get(api_url,headers=headers)
+        response = requests.get(api_url,headers=headers_TMDB)
 
         # Verifica si la solicitud fue exitosa (código de respuesta 200)
         if response.status_code == 200:
@@ -166,7 +172,7 @@ def TMDBApiCallSerieDetails(request):
     api_url = f"https://api.themoviedb.org/3/tv/{serie_id}?language=en-US"
     try:
         # Realiza la solicitud GET a la API externa
-        response = requests.get(api_url,headers=headers)
+        response = requests.get(api_url,headers=headers_TMDB)
 
         # Verifica si la solicitud fue exitosa (código de respuesta 200)
         if response.status_code == 200:
@@ -192,3 +198,39 @@ def TMDBApiCallSerieDetails(request):
     except requests.exceptions.RequestException as e:
         # Maneja las excepciones si ocurre algún error durante la solicitud
         return JsonResponse({'error': str(e)}, status=500)
+
+
+def IGDBApiCallGamesList(request):
+    game = request.GET.get('q', '')
+    api_url = 'https://api.igdb.com/v4/games'
+    fields = f'fields name,summary,cover.image_id,release_dates.human;limit 3;search "{game}";'
+    access_token = get_access_token()
+    headers = {
+        'Client-ID': os.getenv('IGDB_API_CLIENT_ID'),
+        'Authorization': f'Bearer {access_token}',
+        'Content-Type': 'application/json'  
+    }
+
+    try:
+        api_response = requests.post(api_url, headers=headers,data=fields)
+
+        # Procesa la respuesta de la API externa y devuelve una respuesta
+        if api_response.status_code == 200:
+            data = api_response.json()
+
+            filtered_objects = []
+            for obj in data:
+                    filtered_obj = {
+                        'id': obj.get('id'), 
+                        'name': obj.get('name'),
+                        'overview': obj.get('summary'),
+                        'release_date': obj.get('release_dates')[0].get('human'),
+                        'poster_url': f'https://images.igdb.com/igdb/image/upload/t_1080p/{obj.get('cover').get('image_id')}.jpg'
+                    }
+                    filtered_objects.append(filtered_obj)
+
+            return JsonResponse(filtered_objects,safe = False)
+        else:
+            return JsonResponse({'error': 'Failed to fetch data from external API'}, status=api_response.status_code)
+    except requests.exceptions.RequestException as e:
+         return JsonResponse({'error': str(e)}, status=500)
