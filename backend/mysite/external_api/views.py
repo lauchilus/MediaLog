@@ -357,3 +357,12 @@ def AnimeChangePage(request):
         return JsonResponse(response.json())
     except requests.exceptions.RequestException as e:
          return JsonResponse({'error': str(e)}, status=500)
+    
+def AnimeDetails(request):
+    anime = request.GET.get('q','')
+    url = f'https://api.myanimelist.net/v2/anime/{anime}?fields=id,title,main_picture,start_date,end_date,synopsis'
+    try:
+        response = requests.get(url, headers=headers_MAL)
+        return JsonResponse(response.json())
+    except requests.exceptions.RequestException as e:
+         return JsonResponse({'error': str(e)}, status=500)
