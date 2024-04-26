@@ -349,3 +349,11 @@ def SearchAnime(request):
         return JsonResponse(response.json())
     except requests.exceptions.RequestException as e:
          return JsonResponse({'error': str(e)}, status=500)
+    
+def AnimeChangePage(request):
+    url = request.body
+    try:
+        response = requests.get(url, headers=headers_MAL)
+        return JsonResponse(response.json())
+    except requests.exceptions.RequestException as e:
+         return JsonResponse({'error': str(e)}, status=500)
