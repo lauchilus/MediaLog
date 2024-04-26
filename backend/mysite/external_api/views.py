@@ -17,6 +17,10 @@ headers_TMDB = {
     "Authorization": 'Bearer ' + os.getenv("TMDB_ACCESS_TOKEN")
 }
 
+headers_MAL = {
+    'X-MAL-CLIENT-ID' : os.getenv("MAL_CLIENT_ID")
+}
+
 
 
 
@@ -334,5 +338,14 @@ def BookDetails(request):
             return JsonResponse(book)
         else:
             return JsonResponse({'error': 'Failed to retrieve data from TMDB API'}, status=500)
+    except requests.exceptions.RequestException as e:
+         return JsonResponse({'error': str(e)}, status=500)
+    
+def SearchAnime(request):
+    anime = request.GET.get('q','')
+    url = f'https://api.myanimelist.net/v2/anime?q={anime}&limit=15'
+    try:
+        response = requests.get(url, headers=headers_MAL)
+        return JsonResponse(response.json())
     except requests.exceptions.RequestException as e:
          return JsonResponse({'error': str(e)}, status=500)
