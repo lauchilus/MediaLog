@@ -18,7 +18,7 @@ from django.urls import path
 
 from api.views import AddMovieToUser, MovieRetrieveUpdateDestroy, SaveMovieView, UserMoviesList, UserMoviesUpdateDestroy, UserMovies
 from animes.views import AddAnimeToUser, AnimeRetrieveUpdateDestroy, SaveAnimeView, UserAnimeUpdateDestroy, UserAnimes
-from external_api.views import AnimeChangePage, AnimeDetails, BookDetails, IGDBApiCallGamesDetails, IGDBApiCallGamesList, IgdbListGames, SearchAnime, SearchBooksList, TMDBApiCallMovieDetails, TMDBApiCallMoviesList, TMDBApiCallSerieDetails, TMDBApiCallSeriesList
+from external_api.views import AnimeChangePage, AnimeDetails, BookDetails, IGDBApiCallGamesDetails, IGDBApiCallGamesList, IgdbListGames, OLListBooks, SearchAnime, SearchBooksList, TMDBApiCallMovieDetails, TMDBApiCallMoviesList, TMDBApiCallSerieDetails, TMDBApiCallSeriesList, TMDBTrendingMovies, TMDBTrendingSeries
 from books.views import AddBookToUser, BookRetrieveUpdateDestroy, SaveBookView, UserBookUpdateDestroy, UserBooks
 from games.views import AddGameToUser, GameRetrieveUpdateDestroy, SaveGameView, UserGameUpdateDestroy, UserGames
 from series.views import AddSerieToUser, SaveSerieView, SerieRetrieveUpdateDestroy, UserSerieUpdateDestroy, UserSeries
@@ -57,13 +57,16 @@ urlpatterns = [
     #ApiCalls
     path('movie/search/',TMDBApiCallMoviesList, name = 'search-list-movies'),
     path('movie/detail/',TMDBApiCallMovieDetails, name = 'search-movie-detail'),
+    path('movie/list/',TMDBTrendingMovies, name = 'list-movies'),
     path('serie/search/',TMDBApiCallSeriesList, name = 'search-list-series'),
     path('serie/detail/',TMDBApiCallSerieDetails, name = 'search-serie-detail'),
+    path('serie/list/',TMDBTrendingSeries, name = 'list-series'),
     path('game/search/',IGDBApiCallGamesList, name = 'search-list-games'),
     path('game/detail/',IGDBApiCallGamesDetails, name = 'search-game-detail'),
     path('game/list/',IgdbListGames, name = 'list-games'),
     path('book/search/',SearchBooksList, name = 'search-list-books'),
     path('book/detail/',BookDetails, name = 'search-book-detail'),
+    path('book/list/',OLListBooks, name = 'list-books'),
     path('anime/search/',SearchAnime, name = 'search-list-anime'),
     path('anime/search/change_page',AnimeChangePage, name = 'search-anime-pagination'),
     path('anime/detail/',AnimeDetails, name = 'search-anime-detail'),

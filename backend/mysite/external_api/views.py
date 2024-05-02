@@ -81,7 +81,117 @@ def TMDBApiCallMoviesList(request):
     except requests.exceptions.RequestException as e:
         # Maneja las excepciones si ocurre algún error durante la solicitud
         return JsonResponse({'error': str(e)}, status=500)
-    
+
+def TMDBTrendingMovies(request):
+    page = int(request.GET.get('page', 1))
+    api_url = f"https://api.themoviedb.org/3/trending/movie/day?language=en-US&page={page}"
+    try:
+        # Realiza la solicitud GET a la API externa
+        response = requests.get(api_url,headers=headers_TMDB)
+
+        # Verifica si la solicitud fue exitosa (código de respuesta 200)
+        if response.status_code == 200:
+            # Obtiene los datos de la respuesta JSON
+            data = response.json()
+
+            # Extrae los datos fuera del array que necesitas
+            meta_info = {
+                'page': data.get('page'),
+                'total_pages': data.get('total_pages'),
+                'total_results': data.get('total_results')
+            }
+
+            # Verifica si hay un campo que contiene una lista de objetos
+            if 'results' in data:
+                    objects_list = data['results']
+
+                    # Utiliza comprensiones de lista para construir filtered_objects
+                    filtered_objects = [{
+                        'id': obj.get('id'), 
+                        'name': obj.get('title'),
+                        'overview': obj.get('overview'),
+                        'release_date': obj.get('release_date'),
+                        'poster_url': f'https://image.tmdb.org/t/p/w500{obj.get("poster_path")}'
+                    } for obj in objects_list if obj.get('id') and obj.get('title')]
+
+                    # Asegúrate de manejar errores como objetos sin 'id' o 'title'
+            
+
+                # Combinar los datos dentro y fuera del array en una respuesta JSON
+                    response_data = {
+                        'pagination': meta_info,
+                        'movies': filtered_objects
+                    }
+
+                # Devuelve la respuesta JSON combinada
+                    return JsonResponse(response_data)
+
+            else:
+                return JsonResponse({'error': 'No objects found in API response'}, status=400)
+
+        else:
+            # Devuelve un mensaje de error si la solicitud falló
+            return JsonResponse({'error': 'Failed to retrieve data from TMDB API'}, status=500)
+
+    except requests.exceptions.RequestException as e:
+        # Maneja las excepciones si ocurre algún error durante la solicitud
+        return JsonResponse({'error': str(e)}, status=500)
+
+def TMDBTrendingSeries(request):
+    page = int(request.GET.get('page', 1))
+    api_url = f"https://api.themoviedb.org/3/trending/tv/day?language=en-US&page={page}"
+    try:
+        # Realiza la solicitud GET a la API externa
+        response = requests.get(api_url,headers=headers_TMDB)
+
+        # Verifica si la solicitud fue exitosa (código de respuesta 200)
+        if response.status_code == 200:
+            # Obtiene los datos de la respuesta JSON
+            data = response.json()
+
+            # Extrae los datos fuera del array que necesitas
+            meta_info = {
+                'page': data.get('page'),
+                'total_pages': data.get('total_pages'),
+                'total_results': data.get('total_results')
+            }
+
+            # Verifica si hay un campo que contiene una lista de objetos
+            if 'results' in data:
+                    objects_list = data['results']
+
+                    # Utiliza comprensiones de lista para construir filtered_objects
+                    filtered_objects = [{
+                        'id': obj.get('id'), 
+                        'name': obj.get('name'),
+                        'overview': obj.get('overview'),
+                        'release_date': obj.get('first_air_date'),
+                        'poster_url': f'https://image.tmdb.org/t/p/w500{obj.get("poster_path")}'
+                    } for obj in objects_list if obj.get('id') and obj.get('name')]
+
+                    # Asegúrate de manejar errores como objetos sin 'id' o 'title'
+            
+
+                # Combinar los datos dentro y fuera del array en una respuesta JSON
+                    response_data = {
+                        'pagination': meta_info,
+                        'movies': filtered_objects
+                    }
+
+                # Devuelve la respuesta JSON combinada
+                    return JsonResponse(response_data)
+
+            else:
+                return JsonResponse({'error': 'No objects found in API response'}, status=400)
+
+        else:
+            # Devuelve un mensaje de error si la solicitud falló
+            return JsonResponse({'error': 'Failed to retrieve data from TMDB API'}, status=500)
+
+    except requests.exceptions.RequestException as e:
+        # Maneja las excepciones si ocurre algún error durante la solicitud
+        return JsonResponse({'error': str(e)}, status=500)
+
 def TMDBApiCallMovieDetails(request):
     movie_id = request.GET.get('q',"")
     api_url = f"https://api.themoviedb.org/3/movie/{movie_id}?language=en-US"
@@ -357,29 +467,68 @@ def SearchBooksList(request):
 
 def BookDetails(request):
     search = request.GET.get('q','')
+    offset = int(request.GET.get('offset', 1))
     url = f'https://openlibrary.org/works/{search}.json'
 
     try:
         response = requests.get(url)
         if response.status_code == 200:
             data = response.json()
-            
-            
-            obj = data
-                
-            book = {
+            page = math.ceil(data.get('numFound')/15) 
+            meta_info = {
+                'page' : 15 *(offset-1),
+                'total_pages': page,
+                'total_results': data.get('numFound')
+            }
+            if 'docs' in data:
+                objects_list = data['docs']
+                filtered_objects = []
+                for obj in objects_list:
+                    filtered_obj = {
                         'id': obj.get('key'), 
                         'title': obj.get('title'),
-                        'author_key': obj.get('authors')[0].get('author').get('key'),
-                        'description': obj.get('description'),
-                        'poster_url': f'https://covers.openlibrary.org/b/id/{obj.get('covers')[0]}-M.jpg'
+                        'author': obj.get('author_name'),
+                        'poster_url': f'https://covers.openlibrary.org/b/id/{obj.get('cover_id')}-M.jpg'
                     }
-            return JsonResponse(book)
+                    filtered_objects.append(filtered_obj)
+                response_data = {
+                    'pagination': meta_info,
+                    'books': filtered_objects
+                }
+                return JsonResponse(response_data)
+            else:
+                return JsonResponse({'error': 'No objects found in API response'}, status=400)
+        else:
+            return JsonResponse({'error': 'Failed to retrieve data from TMDB API'}, status=500)
+    except requests.exceptions.RequestException as e:
+         return JsonResponse({'error': str(e)}, status=500)
+
+def OLListBooks(request):
+    url = 'https://openlibrary.org/subjects/fiction.json?limit=15'  
+    response = requests.get(url)
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            data = response.json()
+            if 'works' in data:
+                objects_list = data['works']
+                filtered_objects = []
+                for obj in objects_list:
+                    filtered_obj = {
+                        'id': obj.get('key'), 
+                        'title': obj.get('title'),
+                        'author_key': obj.get('authors'),
+                        'description': obj.get('first_publish_year'),
+                        'poster_url': f'https://covers.openlibrary.org/b/id/{obj.get('cover_id')}-M.jpg'
+                    }
+                    filtered_objects.append(filtered_obj)
+                return JsonResponse(filtered_objects,safe=False)
         else:
             return JsonResponse({'error': 'Failed to retrieve data from TMDB API'}, status=500)
     except requests.exceptions.RequestException as e:
          return JsonResponse({'error': str(e)}, status=500)
     
+
 def SearchAnime(request):
     anime = request.GET.get('q','')
     url = f'https://api.myanimelist.net/v2/anime?q={anime}&limit=15'
