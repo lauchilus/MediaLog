@@ -554,3 +554,11 @@ def AnimeDetails(request):
         return JsonResponse(response.json())
     except requests.exceptions.RequestException as e:
          return JsonResponse({'error': str(e)}, status=500)
+
+def ListTopAnime(request):
+    url = f'https://api.myanimelist.net/v2/anime/ranking?ranking_type=all&limit=5'
+    try:
+        response = requests.get(url, headers=headers_MAL)
+        return JsonResponse(response.json())
+    except requests.exceptions.RequestException as e:
+         return JsonResponse({'error': str(e)}, status=500)

@@ -18,7 +18,7 @@ from django.urls import path
 
 from api.views import AddMovieToUser, MovieRetrieveUpdateDestroy, SaveMovieView, UserMoviesList, UserMoviesUpdateDestroy, UserMovies
 from animes.views import AddAnimeToUser, AnimeRetrieveUpdateDestroy, SaveAnimeView, UserAnimeUpdateDestroy, UserAnimes
-from external_api.views import AnimeChangePage, AnimeDetails, BookDetails, IGDBApiCallGamesDetails, IGDBApiCallGamesList, IgdbListGames, OLListBooks, SearchAnime, SearchBooksList, TMDBApiCallMovieDetails, TMDBApiCallMoviesList, TMDBApiCallSerieDetails, TMDBApiCallSeriesList, TMDBTrendingMovies, TMDBTrendingSeries
+from external_api.views import AnimeChangePage, AnimeDetails, BookDetails, IGDBApiCallGamesDetails, IGDBApiCallGamesList, IgdbListGames, ListTopAnime, OLListBooks, SearchAnime, SearchBooksList, TMDBApiCallMovieDetails, TMDBApiCallMoviesList, TMDBApiCallSerieDetails, TMDBApiCallSeriesList, TMDBTrendingMovies, TMDBTrendingSeries
 from books.views import AddBookToUser, BookRetrieveUpdateDestroy, SaveBookView, UserBookUpdateDestroy, UserBooks
 from games.views import AddGameToUser, GameRetrieveUpdateDestroy, SaveGameView, UserGameUpdateDestroy, UserGames
 from series.views import AddSerieToUser, SaveSerieView, SerieRetrieveUpdateDestroy, UserSerieUpdateDestroy, UserSeries
@@ -70,6 +70,7 @@ urlpatterns = [
     path('anime/search/',SearchAnime, name = 'search-list-anime'),
     path('anime/search/change_page',AnimeChangePage, name = 'search-anime-pagination'),
     path('anime/detail/',AnimeDetails, name = 'search-anime-detail'),
+    path('anime/list/',ListTopAnime, name = 'list-animes'),
 
 
 ]
