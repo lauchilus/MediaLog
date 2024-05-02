@@ -556,7 +556,7 @@ def AnimeDetails(request):
          return JsonResponse({'error': str(e)}, status=500)
 
 def ListTopAnime(request):
-    url = f'https://api.myanimelist.net/v2/anime/ranking?ranking_type=all&limit=5'
+    url = f'https://api.myanimelist.net/v2/anime/ranking?ranking_type=all&limit=15'
     try:
         response = requests.get(url, headers=headers_MAL)
         return JsonResponse(response.json())
