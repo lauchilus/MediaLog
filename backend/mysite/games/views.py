@@ -65,4 +65,3 @@ class UserGames(generics.ListAPIView):
         # Filtrar los animes asociados al user_id proporcionado
         queryset = UserGame.objects.filter(user_id=user_id)
         return queryset
-    
