@@ -43,12 +43,14 @@ INSTALLED_APPS = [
     "animes",
     "games",
     "books",
-    "external_api"
+    "external_api",
+    "corsheaders"
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -135,3 +137,7 @@ CACHES = {
         'LOCATION': 'unique-snowflake',
     }
 }
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:4200',
+]

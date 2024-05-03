@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { BooksService } from '../../services/books.service';
 
 @Component({
   selector: 'app-home',
@@ -7,6 +8,30 @@ import { Component } from '@angular/core';
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit{
+  books: any[] = [];
 
+  constructor(private bookService: BooksService) { }
+
+  ngOnInit(): void {
+    this.getItems();
+    
+  }
+
+  getItems(): void {
+    this.bookService.GetBooksList().subscribe(
+      (data) => {
+        this.books = data.map((book: any) =>{
+          return{
+            ...book,
+            
+          }          
+        });console.log(this.books)
+      },
+      error =>{
+        console.log(error);
+      }
+    )
+  }
 }
+
