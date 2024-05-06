@@ -513,16 +513,24 @@ def OLListBooks(request):
             if 'works' in data:
                 objects_list = data['works']
                 filtered_objects = []
-                for obj in objects_list:
-                    filtered_obj = {
-                        'id': obj.get('key'), 
-                        'title': obj.get('title'),
-                        'author_key': obj.get('authors'),
-                        'description': obj.get('first_publish_year'),
-                        'poster_url': f'https://covers.openlibrary.org/b/id/{obj.get('cover_id')}-M.jpg'
-                    }
-                    filtered_objects.append(filtered_obj)
-                return JsonResponse(filtered_objects,safe=False)
+            for obj in objects_list:
+                id = obj.get('key')
+                title = obj.get('title')
+                author = obj.get('authors')[0],
+                publish_date = obj.get('first_publish_year')
+                poster_url = obj.get('cover_id')
+
+                filtered_obj = {
+                    'id': id,
+                    'title': title,
+                    'author': author,
+                    'publish_date': publish_date,
+                    'poster_url': f"https://covers.openlibrary.org/b/id/{poster_url}-M.jpg"
+                }
+                filtered_objects.append(filtered_obj)
+
+              
+            return JsonResponse(filtered_objects,safe=False)
         else:
             return JsonResponse({'error': 'Failed to retrieve data from TMDB API'}, status=500)
     except requests.exceptions.RequestException as e:
