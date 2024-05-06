@@ -18,6 +18,7 @@ from django.urls import path
 
 from api.views import AddMovieToUser, MovieRetrieveUpdateDestroy, SaveMovieView, UserMoviesList, UserMoviesUpdateDestroy, UserMovies
 from animes.views import AddAnimeToUser, AnimeRetrieveUpdateDestroy, SaveAnimeView, UserAnimeUpdateDestroy, UserAnimes
+from test.views import login, signup, test_token
 from external_api.views import AnimeChangePage, AnimeDetails, BookDetails, IGDBApiCallGamesDetails, IGDBApiCallGamesList, IgdbListGames, ListTopAnime, OLListBooks, SearchAnime, SearchBooksList, TMDBApiCallMovieDetails, TMDBApiCallMoviesList, TMDBApiCallSerieDetails, TMDBApiCallSeriesList, TMDBTrendingMovies, TMDBTrendingSeries
 from books.views import AddBookToUser, BookRetrieveUpdateDestroy, SaveBookView, UserBookUpdateDestroy, UserBooks
 from games.views import AddGameToUser, GameRetrieveUpdateDestroy, SaveGameView, UserGameUpdateDestroy, UserGames
@@ -71,6 +72,11 @@ urlpatterns = [
     path('anime/search/change_page',AnimeChangePage, name = 'search-anime-pagination'),
     path('anime/detail/',AnimeDetails, name = 'search-anime-detail'),
     path('anime/list/',ListTopAnime, name = 'list-animes'),
+
+    #AUTH
+    path('login',login, name = 'login'),
+    path('signup',signup, name = 'signup'),
+    path('test_token',test_token, name = 'test-token'),
 
 
 ]
