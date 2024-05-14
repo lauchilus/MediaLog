@@ -7,5 +7,5 @@ import { routes } from './app.routes';
 import { HttpClientModule } from "@angular/common/http";
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideAnimations(), provideRouter(routes), importProvidersFrom(TuiRootModule),importProvidersFrom(HttpClientModule)]
+  providers: [provideAnimations(), provideRouter(routes), importProvidersFrom(TuiRootModule),importProvidersFrom(HttpClientModule),provideAnimations()]
 };

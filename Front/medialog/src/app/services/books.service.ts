@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { IBook } from '../models/book';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +14,8 @@ export class BooksService {
   constructor(private httpClient: HttpClient, private route: Router) { }
 
 
-  GetBooksList(): Observable<any>{
-    return this.httpClient.get(`${this.BASE_URL}book/list/`)
+  GetBooksList(){
+    return this.httpClient.get<IBook[]>(`${this.BASE_URL}book/list/`)
   }
 
 }

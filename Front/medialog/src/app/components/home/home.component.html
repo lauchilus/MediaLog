@@ -1,25 +1,6 @@
-<div class="min-h-screen bg-gray-400">
+<app-carrousel [contents]="books" [title]="'Books'"></app-carrousel>
+<app-carrousel [contents]="movies" [title]="'Movies'"></app-carrousel>
+<app-carrousel [contents]="series" [title]="'Series'"></app-carrousel>
+<app-carrousel [contents]="games" [title]="'Games'"></app-carrousel>
+<app-carrousel [contents]="animes" [title]="'Animes'"></app-carrousel>
 
-
-  <h1 class=" bg-opacity-60">CHUPAVERGA</h1>
-
-
-  <div class="container ml-24">
-
-  
-  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-    @for (book of books; track book.id) {
-
-    <div
-      class="relative h-72 max-w-56 overflow-hidden rounded-xl text-gray-700 group transition-all duration-300 hover:border-yellow-500 bg-center ml-10" >
-      <a class="" class="" href="/details/{{book.id}}">
-        <img alt=""
-          class="absolute inset-0 h-full bg-cover bg-center text-gray-700 shadow-none object-cover w-full aspect-square group-hover:scale-110 transition duration-300 ease-in-out"
-          src="{{book.poster_url}}" />
-      </a>
-    </div>
-
-    }
-  </div>
-</div>
-</div>

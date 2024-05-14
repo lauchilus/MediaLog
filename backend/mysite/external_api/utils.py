@@ -12,10 +12,10 @@ def get_access_token():
     
     access_token = cache.get('access_token')
     expires_at = cache.get('access_token_expires_at')
-
-    
-    if access_token and expires_at > time.time():
-        return access_token
+ 
+    if(expires_at):
+        if access_token and expires_at > time.time():
+            return access_token
 
     
     info = fetch_new_access_token()
