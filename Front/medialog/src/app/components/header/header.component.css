@@ -1,0 +1,8 @@
+a{
+    text-decoration: none;
+
+    &.active{
+        text-decoration-line: underline;
+        
+    }
+}

@@ -7,13 +7,13 @@ import { MoviesService } from '../../../services/movies.service';
 import { SeriesService } from '../../../services/series.service';
 import { IBook } from '../../../models/book';
 import { animate, style, transition, trigger } from '@angular/animations';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Movie } from '../../../models/movie';
 
 @Component({
   selector: 'app-search-media',
   standalone: true,
-  imports: [DescriptionPipe],
+  imports: [DescriptionPipe,RouterModule],
   templateUrl: './search-media.component.html',
   styleUrl: './search-media.component.css',
   animations: [
@@ -39,6 +39,7 @@ export class SearchMediaComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.paramMap.subscribe(params => {
       this.title = params.get('type')!;
+      this.SearchMedia();
     });
 
     this.activatedRoute.queryParamMap.subscribe(params => {
@@ -46,12 +47,11 @@ export class SearchMediaComponent implements OnInit {
       this.page = +params.get('page')! || 1;
       this.SearchMedia();
     });
-    
-    console.log(this.content)
 
   }
 
   NavigateSearch() {
+
     this.router.navigate(['/search', this.title], {
       queryParams: {
         q: this.search,
@@ -140,8 +140,12 @@ export class SearchMediaComponent implements OnInit {
           this.gamesService.GetGamesSearch(this.search, this.page).subscribe(
             (res: any) => {
               this.content = {
-                pagination: res.pagination,
-                items: res.movies as Movie[]
+                pagination: {
+                  page: 0,
+                  total_pages: 0,
+                  total_results: 0
+                },
+                items: res as Movie[]
 
               }
 
@@ -156,7 +160,8 @@ export class SearchMediaComponent implements OnInit {
                   total_results: 0
                 },
                 items: data as Movie[]
-              }
+              },
+              console.log(this.content)
             });
         }
         break;

@@ -11,12 +11,10 @@
     
             <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
             <ul class="ml-4 flex space-x-4">
-              <li><a href="#" class="text-white hover:text-gray-300">Home</a></li>
-              <li><a href="#" class="text-white hover:text-gray-300">Movies</a></li>
-              <li><a href="#" class="text-white hover:text-gray-300">Series</a></li>
-              <li><a href="#" class="text-white hover:text-gray-300">Anime</a></li>
-              <li><a href="#" class="text-white hover:text-gray-300">Games</a></li>
-              <li><a href="#" class="text-white hover:text-gray-300">Books</a></li>
+              @for (route of routes ; track $index) {
+                <li><a [routerLink]="route.path" [queryParams]="queryParams" routerLinkActive="active" class="text-white hover:text-gray-300">{{route.label}}</a></li>
+              }
+              
             </ul>
           </div>
           <div>
