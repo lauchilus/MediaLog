@@ -14,4 +14,8 @@ export class SeriesService {
   GetSeriesList(){
     return this.httpClient.get<any>(`${this.BASE_URL}serie/list/`)
   }
+
+  GetSeriesSearch(serie: string,page: number){
+    return this.httpClient.get<any>(`${this.BASE_URL}serie/search/?q=${serie}&page=${page}`)
+  }
 }

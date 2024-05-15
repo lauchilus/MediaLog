@@ -13,4 +13,10 @@ export class MoviesService {
   GetMoviesList(){
     return this.httpClient.get<any>(`${this.BASE_URL}movie/list/`)
   }
+
+
+  GetMoviesSearch(movie: string,page: number){
+    return this.httpClient.get<any>(`${this.BASE_URL}movie/search/?q=${movie}&page=${page}`)
+  }
 }
+

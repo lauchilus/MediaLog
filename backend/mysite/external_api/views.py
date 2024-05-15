@@ -317,39 +317,49 @@ def TMDBApiCallSerieDetails(request):
 
 def IGDBApiCallGamesList(request):
     game = request.GET.get('q', '')
-    page= int(request.GET.get('page', 1))
+    page = int(request.GET.get('page', 1))
     api_url = 'https://api.igdb.com/v4/games'
-    fields = f'fields name,summary,cover.image_id,release_dates.human;limit 15;offset {15 * (page -1)} ;search "{game}";'
+    fields = f'fields name,summary,cover.image_id,release_dates.human;limit 15;offset {15 * (page - 1)};search "{game}";'
     access_token = get_access_token()
     headers = {
         'Client-ID': os.getenv('IGDB_API_CLIENT_ID'),
         'Authorization': f'Bearer {access_token}',
-        'Content-Type': 'application/json'  
+        'Content-Type': 'application/json'
     }
 
     try:
-        api_response = requests.post(api_url, headers=headers,data=fields)
+        api_response = requests.post(api_url, headers=headers, data=fields)
 
-        # Procesa la respuesta de la API externa y devuelve una respuesta
         if api_response.status_code == 200:
             data = api_response.json()
-
             filtered_objects = []
-            for obj in data:
-                    filtered_obj = {
-                        'id': obj.get('id'), 
-                        'name': obj.get('name'),
-                        'overview': obj.get('summary'),
-                        'release_date': obj.get('release_dates')[0].get('human'),
-                        'poster_url': f'https://images.igdb.com/igdb/image/upload/t_1080p/{obj.get('cover').get('image_id')}.jpg'
-                    }
-                    filtered_objects.append(filtered_obj)
 
-            return JsonResponse(filtered_objects,safe = False)
+            for obj in data:
+                filtered_obj = {
+                    'id': obj.get('id'), 
+                    'name': obj.get('name'),
+                    'overview': obj.get('summary'),
+                    'release_date': None,
+                    'poster_url': None
+                }
+
+                # Manejar fechas de lanzamiento
+                release_dates = obj.get('release_dates', [])
+                if release_dates:
+                    filtered_obj['release_date'] = release_dates[0].get('human')
+
+                # Manejar la imagen de portada
+                cover = obj.get('cover')
+                if cover and cover.get('image_id'):
+                    filtered_obj['poster_url'] = f'https://images.igdb.com/igdb/image/upload/t_1080p/{cover.get('image_id')}.jpg'
+
+                filtered_objects.append(filtered_obj)
+
+            return JsonResponse(filtered_objects, safe=False)
         else:
             return JsonResponse({'error': 'Failed to fetch data from external API'}, status=api_response.status_code)
     except requests.exceptions.RequestException as e:
-         return JsonResponse({'error': str(e)}, status=500)
+        return JsonResponse({'error': str(e)}, status=500)
     
 def IGDBApiCallGamesDetails(request):
     game = request.GET.get('q', '')
@@ -547,9 +557,9 @@ def SearchAnime(request):
          return JsonResponse({'error': str(e)}, status=500)
     
 def AnimeChangePage(request):
-    url = request.body
+    url = request.body.json
     try:
-        response = requests.get(url, headers=headers_MAL)
+        response = requests.get(url.page, headers=headers_MAL)
         return JsonResponse(response.json())
     except requests.exceptions.RequestException as e:
          return JsonResponse({'error': str(e)}, status=500)

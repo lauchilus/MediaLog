@@ -41,7 +41,6 @@ export class HomeComponent implements OnInit{
         return {books,movies,series,animes,games}
       })
     ).subscribe((res:any)=>{
-      console.log(res)
       this.books = res.books as IBook[],
       this.movies = res.movies.movies as Movie[],
       this.series = res.series.movies as Movie[],

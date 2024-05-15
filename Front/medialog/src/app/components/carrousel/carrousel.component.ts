@@ -3,6 +3,8 @@ import Swiper from 'swiper';
 import { DescriptionPipe } from "../../pipes/description.pipe";
 import { trigger, transition, style, animate } from '@angular/animations';
 import 'swiper/css';
+import { Navigation, Pagination } from 'swiper/modules';
+import 'swiper/css/navigation';
 
 @Component({
   selector: 'app-carrousel',
@@ -26,6 +28,7 @@ export class CarrouselComponent implements OnInit, AfterViewInit {
   @Input() title!: string;
   @ViewChild('swiperContainer') swiperContainer!: ElementRef;
   selectedContent: string | null = null;
+  private swiperInstance: Swiper | null = null;
   
   constructor() { }
   ngAfterViewInit(): void {
@@ -36,13 +39,16 @@ export class CarrouselComponent implements OnInit, AfterViewInit {
   }
 
   private initSwiper() {
-    return new Swiper(this.swiperContainer.nativeElement, {
-     
-      centeredSlides: true,
+    this.swiperInstance =  new Swiper(this.swiperContainer.nativeElement, {
+      modules: [Navigation],
+      centeredSlides: false,
       direction: 'horizontal',
       loop: false,
       grabCursor: true,
-      parallax: true,
+      navigation: {
+        nextEl: `.swiper-button-next-${this.title}`,
+        prevEl: `.swiper-button-prev-${this.title}`,
+      },
       breakpoints: {
         600: {
           slidesPerView: 2,

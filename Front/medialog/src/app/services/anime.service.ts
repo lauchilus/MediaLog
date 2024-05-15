@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -14,4 +14,10 @@ export class AnimeService {
   GetAnimeList(){
     return this.httpClient.get<any>(`${this.BASE_URL}anime/list/`)
   }
+
+  GetAnimeSearch(search: string){
+    return this.httpClient.get<any>(`${this.BASE_URL}anime/search/?q=${search}`)
+  }
+
+
 }

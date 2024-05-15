@@ -14,4 +14,8 @@ export class GamesService {
   GetGamesList(){
     return this.httpClient.get<any>(`${this.BASE_URL}game/list/`)
   }
+
+  GetGamesSearch(game: string,page: number){
+    return this.httpClient.get<any>(`${this.BASE_URL}game/search/?q=${game}&page=${page}`)
+  }
 }

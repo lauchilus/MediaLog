@@ -18,4 +18,10 @@ export class BooksService {
     return this.httpClient.get<IBook[]>(`${this.BASE_URL}book/list/`)
   }
 
+  GetBooksSearch(search: string, page: number){
+    return this.httpClient.get<any>(`${this.BASE_URL}book/search/?q=${search}&offset=${page}`)
+  }
+
 }
+
+
