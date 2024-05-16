@@ -1,4 +1,4 @@
-import { Component, Input, input, OnInit } from '@angular/core';
+import { Component, Input, input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { DescriptionPipe } from '../../../pipes/description.pipe';
 import { AnimeService } from '../../../services/anime.service';
 import { BooksService } from '../../../services/books.service';
@@ -13,7 +13,7 @@ import { Movie } from '../../../models/movie';
 @Component({
   selector: 'app-search-media',
   standalone: true,
-  imports: [DescriptionPipe,RouterModule],
+  imports: [DescriptionPipe, RouterModule],
   templateUrl: './search-media.component.html',
   styleUrl: './search-media.component.css',
   animations: [
@@ -32,20 +32,26 @@ export class SearchMediaComponent implements OnInit {
   content!: SearchItems;
   selectedContent: any | null = null;
   search: string = '';
-  page !: number;
+  page : number = 1;
 
   constructor(private bookService: BooksService, private movieService: MoviesService, private animeService: AnimeService, private serieService: SeriesService, private gamesService: GamesService, private activatedRoute: ActivatedRoute, private router: Router) { }
 
+
   ngOnInit(): void {
     this.activatedRoute.paramMap.subscribe(params => {
-      this.title = params.get('type')!;
+      var t = params.get('type')!;
+      if (t !== this.title) {
+        this.title = t;
+      }
+
     });
 
     this.activatedRoute.queryParamMap.subscribe(params => {
       this.search = params.get('q') || '';
-      this.page = +params.get('page')! || 1;
+      this.page = +params.get('page')!;
       this.SearchMedia();
     });
+
 
   }
 
@@ -64,17 +70,17 @@ export class SearchMediaComponent implements OnInit {
     switch (this.title) {
       case 'Books':
         if (this.search.length !== 0) {
-        this.bookService.GetBooksSearch(this.search, this.page).subscribe(
-          (res: any) => {
-            this.content = {
-              pagination: res.pagination,
-              items: res.books as IBook[]
+          this.bookService.GetBooksSearch(this.search, this.page).subscribe(
+            (res: any) => {
+              this.content = {
+                pagination: res.pagination,
+                items: res.books as IBook[]
 
-            }, console.log(this.content)
+              }, console.log(this.content)
 
-          });
-        }else{
-          this.bookService.GetBooksList().subscribe(
+            });
+        } else {
+          this.bookService.GetBooksList(this.page).subscribe(
             (data) => {
               this.content = {
                 pagination: {
@@ -83,9 +89,9 @@ export class SearchMediaComponent implements OnInit {
                   total_results: 0
                 },
                 items: data as IBook[]
-                
-              }     
-              });
+
+              }
+            });
         }
         break;
       case 'Movies':
@@ -122,7 +128,7 @@ export class SearchMediaComponent implements OnInit {
 
             });
         } else {
-          this.serieService.GetSeriesList().subscribe(
+          this.serieService.GetSeriesList(this.page).subscribe(
             (data) => {
               this.content = {
                 pagination: data.pagination,
@@ -150,7 +156,7 @@ export class SearchMediaComponent implements OnInit {
 
             });
         } else {
-          this.gamesService.GetGamesList().subscribe(
+          this.gamesService.GetGamesList(this.page).subscribe(
             (data) => {
               this.content = {
                 pagination: {
@@ -160,7 +166,7 @@ export class SearchMediaComponent implements OnInit {
                 },
                 items: data as Movie[]
               },
-              console.log(this.content)
+                console.log(this.content)
             });
         }
         break;

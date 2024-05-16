@@ -14,12 +14,12 @@ export class BooksService {
   constructor(private httpClient: HttpClient, private route: Router) { }
 
 
-  GetBooksList(){
-    return this.httpClient.get<IBook[]>(`${this.BASE_URL}book/list/`)
+  GetBooksList(page: number = 1){
+    return this.httpClient.get<IBook[]>(`${this.BASE_URL}book/list/?page=${page}`)
   }
 
   GetBooksSearch(search: string, page: number){
-    return this.httpClient.get<any>(`${this.BASE_URL}book/search/?q=${search}&offset=${page}`)
+    return this.httpClient.get<any>(`${this.BASE_URL}book/search/?q=${search}&page=${page}`)
   }
 
 }

@@ -11,8 +11,8 @@ export class GamesService {
   constructor(private httpClient: HttpClient) { }
 
 
-  GetGamesList(){
-    return this.httpClient.get<any>(`${this.BASE_URL}game/list/`)
+  GetGamesList(page: number = 1){
+    return this.httpClient.get<any>(`${this.BASE_URL}game/list/?page=${page}`)
   }
 
   GetGamesSearch(game: string,page: number){

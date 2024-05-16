@@ -11,8 +11,8 @@ export class SeriesService {
   constructor(private httpClient: HttpClient) { }
 
 
-  GetSeriesList(){
-    return this.httpClient.get<any>(`${this.BASE_URL}serie/list/`)
+  GetSeriesList(page: number = 1){
+    return this.httpClient.get<any>(`${this.BASE_URL}serie/list/?page=${page}`)
   }
 
   GetSeriesSearch(serie: string,page: number){

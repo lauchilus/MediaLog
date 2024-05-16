@@ -1,22 +1,25 @@
-<div class="flex flex-col px-40 mt-14">
+<div class="flex flex-col px-4 mt-14 max-w-full xl:px-40 ">
     <h1 class="text-neutral-200 font-bold text-5xl">{{title}}</h1>
     <div class="flex gap-2">
-        <input (keyup.enter)="NavigateSearch()" (input)="onInputChange($event)" class="mt-6 rounded-md w-2/6 bg-slate-100 text-black p-4" type="text"
+        <input (keyup.enter)="NavigateSearch()" (input)="onInputChange($event)" class="mt-6 rounded-md w-full xl:w-2/6 bg-slate-100 text-black p-4" type="text"
             placeholder="Search title {{title}}">
         <button (click)="NavigateSearch()"  class="bg-slate-200 text-black rounded-md mt-6 font-semibold">Search!</button>
     </div>
 
-    <div class="container  mx-10% mt-10">
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-3 max-w-full items-center">
+    <div class="container mx-10% mt-10">
+        <div class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-3 max-w-full items-center">
             @for (item of content.items; track item) {
             <div (mouseenter)="setHoverElement(item)" (mouseleave)="clearHoverElement()" class="rounded-sm relative ">
                 <img [src]="item.poster_url || item.node.main_picture.large" alt=""  class="h-full w-full"/>
                 @if ((item.id === this.selectedContent) || (item.title === this.selectedContent)) {
                 <div @fade class="desc p-2">
-                    <span class="text-base flex flex-wrap font-bold">{{item.title || item.name ||
-                        item.node.title}}</span>
-                    @if(item.overview || item.author_name || !item.node){
-                    <p class="text-xs my-3">{{item.overview || item.author_name | description:150}}</p>
+                    <span class="text-s my-1 xl:my-3 xl:text-base">{{item.title || item.name ||
+                        item.node.title | description: 50}}</span>
+                    @if(item.overview && !item.node){
+                    <p class="text-s my-1 xl:my-3 text-xs ">{{item.overview | description:50}}</p>
+                    }
+                    @if ( item.author_name) {
+                        <p class="text-xs my-3">{{item.author_name}}</p>
                     }
                     <div class="py-3 absolute w-[90%] bottom-1">
                         <p class="text-xs flex justify-between items-center">

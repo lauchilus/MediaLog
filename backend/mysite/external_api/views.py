@@ -437,7 +437,7 @@ def IgdbListGames(request):
     
 def SearchBooksList(request):
     search = request.GET.get('q','')
-    offset = int(request.GET.get('offset', 1))
+    offset = int(request.GET.get('page', 1))
     url = f'https://openlibrary.org/search.json?q={search}&fields=key,title,author_name,author_key,publish_date,cover_i&limit=15&offset={15 *(offset-1)}'
 
     try:
@@ -514,12 +514,13 @@ def BookDetails(request):
          return JsonResponse({'error': str(e)}, status=500)
 
 def OLListBooks(request):
-    url = 'https://openlibrary.org/subjects/fiction.json?limit=15'  
+    offset = int(request.GET.get('page', 1))
+    url = f'https://openlibrary.org/subjects/fiction.json?limit=15&offset={15 *(offset-1)}'  
     response = requests.get(url)
     try:
         response = requests.get(url)
         if response.status_code == 200:
-            data = response.json()
+            data = response.json()  
             if 'works' in data:
                 objects_list = data['works']
                 filtered_objects = []
