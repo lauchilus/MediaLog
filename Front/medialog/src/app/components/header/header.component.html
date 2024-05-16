@@ -1,26 +1,68 @@
 <header>
-    <nav class="bg-teal-700 p-4 tui-text_body-m-2">
+   <nav class="bg-teal-700 p-4 tui-text_body-m-2">
+      <!-- medium-big-->
+      <div class="hidden md:flex items-center justify-center flex-1">
+         <a href="/home" class="flex items-center space-x-2 rtl:space-x-reverse">
+            <img
+               src="https://cdn0.iconfinder.com/data/icons/game-development-filloutline/64/TESTING-clipboard-check_list-gaming-game_development-512.png"
+               class="h-8" alt="Flowbite Logo" />
+            <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Medialog</span>
+         </a>
 
-        
-          
-          <div class="hidden md:flex items-center justify-center flex-1">
-            <a href="/home" class="flex items-center space-x-2 rtl:space-x-reverse">
-                <img src="https://cdn0.iconfinder.com/data/icons/game-development-filloutline/64/TESTING-clipboard-check_list-gaming-game_development-512.png" class="h-8" alt="Flowbite Logo" />
-                <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Medialog</span>
-              </a>
-    
-            <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
+         <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
             <ul class="ml-4 flex space-x-4">
-              @for (route of routes ; track $index) {
-                <li><a [routerLink]="route.path" [queryParams]="queryParams" routerLinkActive="active" class="text-white hover:text-gray-300">{{route.label}}</a></li>
-              }
-              
+               @for (route of routes ; track $index) {
+               <li><a [routerLink]="route.path" [queryParams]="queryParams" routerLinkActive="active"
+                     class="text-white hover:text-gray-300">{{route.label}}</a></li>
+               }
+
             </ul>
-          </div>
-          <div>
+         </div>
+         <div>
             <tui-avatar text="Yulia Tsareva" class="tui-space_top-1"></tui-avatar>
-          </div>
-        </div>
-      </nav>
+         </div>
+      </div>
+
+      <!-- Smal-->
+
+      <div class="flex active md:hidden xl:hidden justify-between gap-2 flex-1">
+         <a href="/home" class="flex items-center space-x-2 rtl:space-x-reverse">
+            <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Medialog</span>
+         </a>
+         <button #hamMenu (click)="ToggleMenu()" class="w-12 h-12">
+            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="40" height="40" viewBox="0 0 50 50">
+               <path
+                  d="M 0 7.5 L 0 12.5 L 50 12.5 L 50 7.5 L 0 7.5 z M 0 22.5 L 0 27.5 L 50 27.5 L 50 22.5 L 0 22.5 z M 0 37.5 L 0 42.5 L 50 42.5 L 50 37.5 L 0 37.5 z">
+               </path>
+            </svg>
+         </button>
+         
+         <div #sidebar
+            class="close-ham fixed flex-col z-40 bg-opacity-70 backdrop-blur-lg animate-fade-left animate-once justify-start top-0 right-0 w-full mx-0 h-full hidden sm:active bg-emerald-950 xl:hidden  ">
+
+            <div class=" w-[90%] h-full  ml-2 pl-4 flex-col justify-start items-center xl:hidden;">
+               <button (click)="ToggleMenu()" id="close-ham"  class="w-12 h-12 gap-4 ml-4 my-4 opacity-100">
+                  <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="40" height="40" viewBox="0 0 30 30">
+                     <path d="M 7 4 C 6.744125 4 6.4879687 4.0974687 6.2929688 4.2929688 L 4.2929688 6.2929688 C 3.9019687 6.6839688 3.9019687 7.3170313 4.2929688 7.7070312 L 11.585938 15 L 4.2929688 22.292969 C 3.9019687 22.683969 3.9019687 23.317031 4.2929688 23.707031 L 6.2929688 25.707031 C 6.6839688 26.098031 7.3170313 26.098031 7.7070312 25.707031 L 15 18.414062 L 22.292969 25.707031 C 22.682969 26.098031 23.317031 26.098031 23.707031 25.707031 L 25.707031 23.707031 C 26.098031 23.316031 26.098031 22.682969 25.707031 22.292969 L 18.414062 15 L 25.707031 7.7070312 C 26.098031 7.3170312 26.098031 6.6829688 25.707031 6.2929688 L 23.707031 4.2929688 C 23.316031 3.9019687 22.682969 3.9019687 22.292969 4.2929688 L 15 11.585938 L 7.7070312 4.2929688 C 7.5115312 4.0974687 7.255875 4 7 4 z"></path>
+                 </svg>
+               </button>
+               <ul class=" flex-col mx-4 h-8 gap-4">
+                  @for (route of routes ; track $index) {
+                  <li class="w-full h-10 hover:opacity-40"><a [routerLink]="route.path" [queryParams]="queryParams" routerLinkActive="active"
+                        class="text-white text-2xl hover:text-gray-300 w-full ">{{route.label}}</a></li>
+                  }
+
+               </ul>
+            </div>
+         </div>
+         
+
+      </div>
+
+   </nav>
+
+
+
+
 
 </header>
