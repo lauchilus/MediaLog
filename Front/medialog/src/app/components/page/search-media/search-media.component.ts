@@ -39,7 +39,6 @@ export class SearchMediaComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.paramMap.subscribe(params => {
       this.title = params.get('type')!;
-      this.SearchMedia();
     });
 
     this.activatedRoute.queryParamMap.subscribe(params => {
@@ -101,7 +100,7 @@ export class SearchMediaComponent implements OnInit {
 
             });
         } else {
-          this.movieService.GetMoviesList().subscribe(
+          this.movieService.GetMoviesList(this.page).subscribe(
             (data) => {
               this.content = {
                 pagination: data.pagination,

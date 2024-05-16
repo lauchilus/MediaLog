@@ -10,8 +10,8 @@ export class MoviesService {
   constructor(private httpClient: HttpClient) { }
 
 
-  GetMoviesList(){
-    return this.httpClient.get<any>(`${this.BASE_URL}movie/list/`)
+  GetMoviesList(page: number = 1){
+    return this.httpClient.get<any>(`${this.BASE_URL}movie/list/?page=${page}`)
   }
 
 
