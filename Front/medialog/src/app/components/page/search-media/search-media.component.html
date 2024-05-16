@@ -40,8 +40,25 @@
 
     </div>
 
-    <div class="">
+    <div class=" flex bg-emerald-300  items-center my-8 gap-2 text-center border-black text-slate-950 font-semibold text-xl justify-items-center justify-center h-14">
 
+        <a href="#" class="p-2 mr-4 rounded hover:bg-gray-100">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+          </a>
+
+        <div class="align-middle text-center justify-end items-end flex mx-2 px-2">
+            <p class="text-center">Items per page: 15 / page: {{content.pagination.page}} <span>-</span> {{content.pagination.total_pages}}</p>
+        </div>
+        <a href="#" class="p-2 ml-4 rounded hover:bg-gray-100">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </a>
+
+        
+        
     </div>
 
 </div>
