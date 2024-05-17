@@ -9,6 +9,7 @@ import { IBook } from '../../../models/book';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Movie } from '../../../models/movie';
+import { Anime } from '../../../models/anime';
 
 @Component({
   selector: 'app-search-media',
@@ -27,12 +28,19 @@ import { Movie } from '../../../models/movie';
 })
 export class SearchMediaComponent implements OnInit {
 
+
+
   title!: string;
 
   content!: SearchItems;
+  animePaging = {
+    next : '',
+    prev : ''
+  };
+
   selectedContent: any | null = null;
   search: string = '';
-  page : number = 1;
+  page: number = 1;
 
   constructor(private bookService: BooksService, private movieService: MoviesService, private animeService: AnimeService, private serieService: SeriesService, private gamesService: GamesService, private activatedRoute: ActivatedRoute, private router: Router) { }
 
@@ -84,8 +92,8 @@ export class SearchMediaComponent implements OnInit {
             (data) => {
               this.content = {
                 pagination: {
-                  page: 0,
-                  total_pages: 0,
+                  page: this.page,
+                  total_pages: 100,
                   total_results: 0
                 },
                 items: data as IBook[]
@@ -139,6 +147,47 @@ export class SearchMediaComponent implements OnInit {
         break;
       case 'Animes':
         // TODO: ADD ANIME AN PAGINATION LOGIC
+        if (this.search.length !== 0) {
+          this.animeService.GetAnimeSearch(this.search).subscribe(
+            (res: any) => {
+              this.content = {
+                pagination: {
+                  page: this.page,
+                  total_pages: 1,
+                  total_results: 0
+                },
+                items: res.data as Anime[],
+
+
+              },
+                this.animePaging = {
+                  next: res.paging.next ? res.paging.next : '' ,
+                  prev: res.paging.previous ? res.paging.previous : '' ,
+                },
+                console.log(res.paging)
+
+            });
+
+        } else {
+          this.animeService.GetAnimeList().subscribe(
+            (data) => {
+
+              this.content = {
+                pagination: {
+                  page: this.page,
+                  total_pages: 100,
+                  total_results: 0
+                },
+                items: data.data as Anime[]
+              },
+              this.animePaging = {
+                next: data.paging.next ? data.paging.next : ''  ,
+                prev: data.paging.previous ? data.paging.previous : '' ,
+              },
+              console.log(data.paging)
+
+            });
+        }
         break;
       case 'Games':
         if (this.search.length !== 0) {
@@ -146,12 +195,11 @@ export class SearchMediaComponent implements OnInit {
             (res: any) => {
               this.content = {
                 pagination: {
-                  page: 0,
-                  total_pages: 0,
-                  total_results: 0
+                  page: this.page,
+                  total_pages: 100,
+                  total_results: 1000
                 },
                 items: res as Movie[]
-
               }
 
             });
@@ -160,9 +208,9 @@ export class SearchMediaComponent implements OnInit {
             (data) => {
               this.content = {
                 pagination: {
-                  page: 0,
-                  total_pages: 0,
-                  total_results: 0
+                  page: this.page,
+                  total_pages: 100,
+                  total_results: 1000
                 },
                 items: data as Movie[]
               },
@@ -190,6 +238,52 @@ export class SearchMediaComponent implements OnInit {
     this.search = input;
   }
 
+  PrevPage() {
+    if (this.title === "Animes") {
+      this.ChangePageAnime(this.animePaging.prev)
+    } else {
+      this.page--;
+      this.NavigateSearch()
+    }
+  }
+
+  NextPage() {
+    if (this.title === "Animes") {
+      this.ChangePageAnime(this.animePaging.next)
+    } else {
+      this.page = this.addWithLimit(this.page,1,this.content.pagination.total_pages+1);
+      this.NavigateSearch()
+    }
+  }
+
+  private ChangePageAnime(url: string){
+    this.animeService.ChangePage(url).subscribe(
+      (res: any) => {
+        this.content = {
+          pagination: {
+            page: this.page,
+            total_pages: this.page+1,
+            total_results: 0
+          },
+          items: res.data as Anime[],
+
+
+        },
+          this.animePaging = {
+            next: res.paging.next ? res.paging.next : ''  ,
+            prev: res.paging.previous? res.paging.previous : '' ,
+          },
+          console.log(res.paging)
+
+      });
+      
+  }
+
+  private addWithLimit(currentValue: number, increment: number, maxValue: number): number {
+    const newValue = currentValue + increment;
+    return newValue >= maxValue ? maxValue : newValue;
+}
+
 }
 
 export interface SearchItems {
@@ -203,6 +297,32 @@ export interface Pagination {
   total_results: number
 }
 
-function get(arg0: string) {
-  throw new Error('Function not implemented.');
+export interface SearchAnime {
+  items: Anime[]
+  pagination: Paging
+}
+
+export interface Daum {
+  node: Node
+  ranking: Ranking
+}
+
+export interface Node {
+  id: number
+  title: string
+  main_picture: MainPicture
+}
+
+export interface MainPicture {
+  medium: string
+  large: string
+}
+
+export interface Ranking {
+  rank: number
+}
+
+export interface Paging {
+  next: string
+  prev: string
 }

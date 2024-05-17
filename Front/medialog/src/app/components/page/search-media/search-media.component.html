@@ -1,16 +1,19 @@
 <div class="flex flex-col px-4 mt-14 max-w-full xl:px-40 ">
     <h1 class="text-neutral-200 font-bold text-5xl">{{title}}</h1>
     <div class="flex gap-2">
-        <input (keyup.enter)="NavigateSearch()" (input)="onInputChange($event)" class="mt-6 rounded-md w-full xl:w-2/6 bg-slate-100 text-black p-4" type="text"
+        <input (keyup.enter)="NavigateSearch()" (input)="onInputChange($event)"
+            class="mt-6 rounded-md w-full xl:w-2/6 bg-slate-100 text-black p-4" type="text"
             placeholder="Search title {{title}}">
-        <button (click)="NavigateSearch()"  class="bg-slate-200 text-black rounded-md mt-6 font-semibold">Search!</button>
+        <button (click)="NavigateSearch()"
+            class="bg-slate-200 text-black rounded-md mt-6 font-semibold">Search!</button>
     </div>
 
     <div class="container mx-10% mt-10">
-        <div class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-3 max-w-full items-center">
+        <div
+            class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-3 max-w-full items-center">
             @for (item of content.items; track item) {
             <div (mouseenter)="setHoverElement(item)" (mouseleave)="clearHoverElement()" class="rounded-sm relative ">
-                <img [src]="item.poster_url || item.node.main_picture.large" alt=""  class="h-full w-full"/>
+                <img [src]="item.poster_url || item.node.main_picture.large" alt="" class="h-full w-full" />
                 @if ((item.id === this.selectedContent) || (item.title === this.selectedContent)) {
                 <div @fade class="desc p-2">
                     <span class="text-s my-1 xl:my-3 xl:text-base">{{item.title || item.name ||
@@ -19,7 +22,7 @@
                     <p class="text-s my-1 xl:my-3 text-xs ">{{item.overview | description:50}}</p>
                     }
                     @if ( item.author_name) {
-                        <p class="text-xs my-3">{{item.author_name}}</p>
+                    <p class="text-xs my-3">{{item.author_name}}</p>
                     }
                     <div class="py-3 absolute w-[90%] bottom-1">
                         <p class="text-xs flex justify-between items-center">
@@ -36,32 +39,41 @@
 
                 }
             </div>
-            
+
 
             }
         </div>
 
     </div>
 
-    <div class=" flex bg-emerald-300  items-center my-8 gap-2 text-center border-black text-slate-950 font-semibold text-xl justify-items-center justify-center h-14">
-
-        <a href="#" class="p-2 mr-4 rounded hover:bg-gray-100">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+    <div
+        class=" flex bg-emerald-300  items-center my-8 gap-2 text-center border-black text-slate-950 font-semibold text-xl justify-items-center justify-center h-14">
+        @if (content.pagination.page > 1 || this.animePaging.prev.length > 0) {
+        <a (click)="PrevPage()" class="p-2 mr-4 rounded hover:bg-gray-100">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
             </svg>
-          </a>
+        </a>
+        }
+
 
         <div class="align-middle text-center justify-end items-end flex mx-2 px-2">
-            <p class="text-center">Items per page: 15 / page: {{content.pagination.page}} <span>-</span> {{content.pagination.total_pages}}</p>
+            <p class="text-center">Items per page: 15 / page: {{content.pagination.page}} <span>-</span>
+                {{content.pagination.total_pages}}</p>
         </div>
-        <a href="#" class="p-2 ml-4 rounded hover:bg-gray-100">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        @if (content.pagination.page < content.pagination.total_pages-1 || this.animePaging.next.length > 0) { 
+            <a (click)="NextPage()" class="p-2 ml-4 rounded hover:bg-gray-100">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
             </svg>
-          </a>
+            </a>
+            }
 
-        
-        
+
+
+
     </div>
 
 </div>

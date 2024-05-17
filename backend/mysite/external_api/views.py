@@ -1,9 +1,11 @@
+import json
 import math
 import os
 from django.http import JsonResponse
 from django.shortcuts import render
 import requests
 from dotenv import load_dotenv
+from rest_framework.decorators import api_view
 
 from external_api.utils import get_access_token
 
@@ -556,14 +558,26 @@ def SearchAnime(request):
         return JsonResponse(response.json())
     except requests.exceptions.RequestException as e:
          return JsonResponse({'error': str(e)}, status=500)
-    
+
+@api_view(['POST'])
 def AnimeChangePage(request):
-    url = request.body.json
     try:
-        response = requests.get(url.page, headers=headers_MAL)
-        return JsonResponse(response.json())
+        # Parse the JSON body of the request
+        body = json.loads(request.body)
+        url = body.get('url')  # Safely get the URL from the parsed JSON
+        
+        if not url:
+            return JsonResponse({'error': 'URL not provided'}, status=400)
+        
+        # Perform the request to the provided URL
+        response = requests.get(url, headers=headers_MAL)
+        
+        # Return the response from the external request
+        return JsonResponse(response.json(), safe=False)
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON'}, status=400)
     except requests.exceptions.RequestException as e:
-         return JsonResponse({'error': str(e)}, status=500)
+        return JsonResponse({'error': str(e)}, status=500)
     
 def AnimeDetails(request):
     anime = request.GET.get('q','')
