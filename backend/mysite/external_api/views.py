@@ -480,36 +480,25 @@ def SearchBooksList(request):
 def BookDetails(request):
     search = request.GET.get('q','')
     offset = int(request.GET.get('offset', 1))
-    url = f'https://openlibrary.org/works/{search}.json'
+    url = f'https://openlibrary.org/{search}.json'
 
     try:
         response = requests.get(url)
         if response.status_code == 200:
             data = response.json()
-            page = math.ceil(data.get('numFound')/15) 
-            meta_info = {
-                'page' : 15 *(offset-1),
-                'total_pages': page,
-                'total_results': data.get('numFound')
-            }
-            if 'docs' in data:
-                objects_list = data['docs']
-                filtered_objects = []
-                for obj in objects_list:
-                    filtered_obj = {
-                        'id': obj.get('key'), 
-                        'title': obj.get('title'),
-                        'author': obj.get('author_name'),
-                        'poster_url': f'https://covers.openlibrary.org/b/id/{obj.get('cover_id')}-M.jpg'
-                    }
-                    filtered_objects.append(filtered_obj)
-                response_data = {
-                    'pagination': meta_info,
-                    'books': filtered_objects
+            
+          
+                
+            filtered_obj = {
+                     'id': data.get('key'), 
+                    'title': data.get('title'),
+                    'author': data.get('authors')[0],
+                    'description': data.get('description'),
+                    'first_publish_date': data.get('first_publish_date'),
+                    'poster_url': f'https://covers.openlibrary.org/b/id/{data.get('covers')[0]}-M.jpg'
                 }
-                return JsonResponse(response_data)
-            else:
-                return JsonResponse({'error': 'No objects found in API response'}, status=400)
+               
+            return JsonResponse(filtered_obj)
         else:
             return JsonResponse({'error': 'Failed to retrieve data from TMDB API'}, status=500)
     except requests.exceptions.RequestException as e:

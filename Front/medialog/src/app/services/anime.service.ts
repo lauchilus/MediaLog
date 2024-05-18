@@ -22,6 +22,10 @@ export class AnimeService {
   ChangePage(url: string){
     return this.httpClient.post<any>(`${this.BASE_URL}anime/search/change_page`,{url: url})
   }
+  
+  GetAnimeDetails(q: string){
+    return this.httpClient.get<any>(`${this.BASE_URL}anime/detail/?q=${q}`)
+  }
 
 
 }
